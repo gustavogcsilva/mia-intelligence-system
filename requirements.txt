@@ -1,0 +1,5 @@
+streamlit
+supabase
+pandas
+streamlit-mic-recorder
+python-dotenv

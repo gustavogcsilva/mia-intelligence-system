@@ -1,0 +1,21 @@
+[theme]
+# Cor principal (botões, sliders, links)
+primaryColor = "#414f5f"
+
+# Cor de fundo principal
+backgroundColor = "#1e809b"
+
+# Cor de fundo da barra lateral (sidebar)
+secondaryBackgroundColor = "#abc3ce"
+
+# Cor do texto
+textColor = "#2C3E50"
+
+# Fonte (Opções: "sans serif", "serif", ou "monospace")
+font = "sans serif"
+
+borderColor="mediumSlateBlue"
+showWidgetBorder=false
+
+[theme.sidebar]
+showWidgetBorder=true
