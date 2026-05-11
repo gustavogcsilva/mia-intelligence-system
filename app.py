@@ -10,7 +10,7 @@ from database import (
 )
 
 # --- CONFIGURAÇÃO INICIAL (DEVE SER A PRIMEIRA COISA) ---
-st.set_page_config(page_title="Mia - Bem Estar", page_icon="🌱", layout="centered")
+st.set_page_config(page_title="Mia - Bem Estar", page_icon=":D", layout="centered")
 
 # --- 1. FUNÇÃO DE ESTILO ---
 def configurar_estilo_autenticacao(caminho_imagem):
