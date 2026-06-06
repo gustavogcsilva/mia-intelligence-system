@@ -16,7 +16,7 @@ O **Mia** é um assistente pessoal de bem-estar integrado a uma Inteligência Ar
 - **Inteligência Artificial:** Google Gemini API (gemini-1.5-flash).
 - **Banco de Dados:** MySQL (hospedado no Aiven).
 - **Processamento de Áudio:** SpeechRecognition + Audio Recorder Streamlit.
-- **Relatórios:** FPDF e Pandas.
+- **Relatório:** Pandas.
 
 ## ⚙️ Configuração para Produção
 
