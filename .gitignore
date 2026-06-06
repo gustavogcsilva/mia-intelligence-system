@@ -1,4 +1,7 @@
-venv/
+.streamlit/
+__pycache__/
+*.pyc
 .env
-streamlit/
-secrets.toml
+temp_audio.wav
+venv/
+.venv/
