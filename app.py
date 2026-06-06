@@ -166,29 +166,35 @@ def processar_audio_web(bytes_audio):
     return ""
 
 # --- 4. FUNÇÕES DE BANCO E PDF ---
+
 def gerar_pdf_pagina_bytes(reg):
-    # Inicialize o PDF com suporte a Unicode
     pdf = FPDF()
-    
-    # Adicione uma fonte padrão que suporte acentos (a fpdf2 já tem a DejaVu)
-    pdf.add_font("DejaVu", "", "DejaVuSans.ttf", uni=True)
-    pdf.add_font("DejaVu", "B", "DejaVuSans-Bold.ttf", uni=True)
-    
     pdf.add_page()
-    pdf.set_font("DejaVu", "B", 14) # Use a fonte que você carregou
     
+    # Use 'helvetica' (ou 'arial'), a fpdf2 gerencia o Unicode internamente
+    # Sem precisar carregar arquivos .ttf externos
+    pdf.set_font("helvetica", "B", 14)
     pdf.cell(0, 10, "Caderno Terapeutico Mia", ln=True, align="C")
     pdf.ln(4)
     
-    # Agora pode usar os dados originais do 'reg' sem precisar de limpeza pesada
-    # pois a fonte DejaVu suporta UTF-8 completo
-    pdf.set_font("DejaVu", "", 10)
-    texto_cabecalho = f"Data: {reg.get('data_f', '')} | Horário: {reg.get('hora_f', '')} | Humor: {reg.get('sentimento', '')}"
+    pdf.set_font("helvetica", "", 10)
+    texto_cabecalho = f"Data: {reg.get('data_f', '')} | Horario: {reg.get('hora_f', '')} | Humor: {reg.get('sentimento', '')}"
     pdf.cell(0, 6, texto_cabecalho, ln=True)
     
     pdf.line(10, 28, 200, 28)
     pdf.ln(6)
-        
+    
+    # Se precisar de negrito em partes do texto
+    for title, val in [("1. Como foi o dia hoje?", reg.get('como_foi_dia', '')), 
+                       ("2. O que pode melhorar amanha?", reg.get('o_que_melhorar', '')), 
+                       ("3. Desabafo Livre:", reg.get('desabafo_livre', ''))]:
+        pdf.set_font("helvetica", "B", 11)
+        pdf.cell(0, 8, title, ln=True)
+        pdf.set_font("helvetica", "", 10)
+        # Use o método multi_cell normalmente
+        pdf.multi_cell(0, 6, str(val))
+        pdf.ln(3)
+
     return pdf.output()
 
 def salvar_caderno_completo(usuario_id, data, como_foi, melhorar, desabafo, sentimento, insight):
