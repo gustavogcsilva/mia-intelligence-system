@@ -194,8 +194,6 @@ def exibir_diario_na_tela(reg):
             st.info(f"**Indicações da Mia:**\n\n{reg['insight_ia']}")
 
 
-if st.button("👁️ Visualizar Diário"):
-    exibir_diario_na_tela(reg)
 
 def salvar_caderno_completo(usuario_id, data, como_foi, melhorar, desabafo, sentimento, insight):
     conexao = obter_conexao()
