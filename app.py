@@ -6,7 +6,7 @@ import pandas as pd
 import base64
 import os
 from zoneinfo import ZoneInfo
-from fpdf import FPDF
+# from fpdf import FPDF
 import re
 import speech_recognition as sr  
 from audio_recorder_streamlit import audio_recorder
@@ -165,37 +165,37 @@ def processar_audio_web(bytes_audio):
             st.warning("⚠️ Áudio não compreendido. Tente falar um pouco mais perto.")
     return ""
 
-# --- 4. FUNÇÕES DE BANCO E PDF ---
 
-def gerar_pdf_pagina_bytes(reg):
-    pdf = FPDF()
-    pdf.add_page()
-    
-    # Use 'helvetica' (ou 'arial'), a fpdf2 gerencia o Unicode internamente
-    # Sem precisar carregar arquivos .ttf externos
-    pdf.set_font("helvetica", "B", 14)
-    pdf.cell(0, 10, "Caderno Terapeutico Mia", ln=True, align="C")
-    pdf.ln(4)
-    
-    pdf.set_font("helvetica", "", 10)
-    texto_cabecalho = f"Data: {reg.get('data_f', '')} | Horario: {reg.get('hora_f', '')} | Humor: {reg.get('sentimento', '')}"
-    pdf.cell(0, 6, texto_cabecalho, ln=True)
-    
-    pdf.line(10, 28, 200, 28)
-    pdf.ln(6)
-    
-    # Se precisar de negrito em partes do texto
-    for title, val in [("1. Como foi o dia hoje?", reg.get('como_foi_dia', '')), 
-                       ("2. O que pode melhorar amanha?", reg.get('o_que_melhorar', '')), 
-                       ("3. Desabafo Livre:", reg.get('desabafo_livre', ''))]:
-        pdf.set_font("helvetica", "B", 11)
-        pdf.cell(0, 8, title, ln=True)
-        pdf.set_font("helvetica", "", 10)
-        # Use o método multi_cell normalmente
-        pdf.multi_cell(0, 6, str(val))
-        pdf.ln(3)
+def exibir_diario_na_tela(reg):
+    # Criar um container com borda para simular a aparência de uma "página"
+    with st.container(border=True):
+        st.header("Caderno Terapêutico Mia")
+        st.divider()
+        
+        # Cabeçalho com as informações básicas
+        col1, col2, col3 = st.columns(3)
+        col1.write(f"**Data:** {reg.get('data_f', '-')}")
+        col2.write(f"**Horário:** {reg.get('hora_f', '-')}")
+        col3.write(f"**Humor:** {reg.get('sentimento', '-')}")
+        
+        st.write("---")
+        
+        # Exibição dos campos
+        st.subheader("1. Como foi o dia hoje?")
+        st.write(reg.get('como_foi_dia', 'Nenhum registro.'))
+        
+        st.subheader("2. O que pode melhorar amanhã?")
+        st.write(reg.get('o_que_melhorar', 'Nenhum registro.'))
+        
+        st.subheader("3. Desabafo Livre:")
+        st.write(reg.get('desabafo_livre', 'Nenhum registro.'))
+        
+        if reg.get('insight_ia'):
+            st.info(f"**Indicações da Mia:**\n\n{reg['insight_ia']}")
 
-    return pdf.output()
+
+if st.button("👁️ Visualizar Diário"):
+    exibir_diario_na_tela(reg)
 
 def salvar_caderno_completo(usuario_id, data, como_foi, melhorar, desabafo, sentimento, insight):
     conexao = obter_conexao()
@@ -446,7 +446,7 @@ def tela_principal_mia():
                 if reg['desabafo_livre']: st.write(f"**Desabafo:**\n{reg['desabafo_livre']}")
                 if reg['insight_ia']: st.markdown(f"{reg['insight_ia'].replace('**', '')}")
                 
-                st.download_button("📥 Exportar PDF", data=gerar_pdf_pagina_bytes(reg), file_name=f"diario.pdf", mime="application/pdf", use_container_width=True)
+                # st.download_button("📥 Exportar PDF", data=gerar_pdf_pagina_bytes(reg), file_name=f"diario.pdf", mime="application/pdf", use_container_width=True)
         else:
             st.info("O seu diário ainda não possui folhas escritas.")
         st.markdown("</div>", unsafe_allow_html=True)
