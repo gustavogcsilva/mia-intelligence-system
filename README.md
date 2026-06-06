@@ -7,7 +7,7 @@ O **Mia** é um assistente pessoal de bem-estar integrado a uma Inteligência Ar
 - **Diário Inteligente:** Registro diário de emoções e desabafos.
 - **Análise da Mia:** Integração com a IA do Google (Gemini) para oferecer acolhimento empático e recomendações dinâmicas de livros e músicas.
 - **Segurança Clínica:** Detecção automática de gatilhos críticos com suporte direto ao CVV (188).
-- **Exportação:** Histórico completo disponível para download em formato CSV e páginas individuais em PDF.
+- **Exportação:** Histórico completo disponível para download em formato CSV.
 - **Modo Seguro:** Sistema de *fallback* automático que garante que o usuário sempre receba uma sugestão vinda do banco de dados, mesmo em caso de falha da API.
 
 ## 🛠️ Tecnologias Utilizadas
