@@ -167,44 +167,28 @@ def processar_audio_web(bytes_audio):
 
 # --- 4. FUNÇÕES DE BANCO E PDF ---
 def gerar_pdf_pagina_bytes(reg):
+    # Inicialize o PDF com suporte a Unicode
     pdf = FPDF()
+    
+    # Adicione uma fonte padrão que suporte acentos (a fpdf2 já tem a DejaVu)
+    pdf.add_font("DejaVu", "", "DejaVuSans.ttf", uni=True)
+    pdf.add_font("DejaVu", "B", "DejaVuSans-Bold.ttf", uni=True)
+    
     pdf.add_page()
-    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_font("DejaVu", "B", 14) # Use a fonte que você carregou
+    
     pdf.cell(0, 10, "Caderno Terapeutico Mia", ln=True, align="C")
     pdf.ln(4)
     
-    # DICA: Em vez de regex complexo para remover caracteres, 
-    # a fpdf2 suporta UTF-8 nativamente se você configurar a fonte.
-    # Mas mantendo sua lógica de limpeza para garantir compatibilidade:
-    humor_limpo = str(reg.get('sentimento', ''))
-    dia_limpo = str(reg.get('como_foi_dia', ''))
-    melhorar_limpo = str(reg.get('o_que_melhorar', ''))
-    desabafo_limpo = str(reg.get('desabafo_livre', ''))
-    insight_limpo = str(reg.get('insight_ia', ''))
-
-    pdf.set_font("Helvetica", "", 10)
-    pdf.cell(0, 6, f"Data: {reg.get('data_f', '')} | Horario: {reg.get('hora_f', '')} | Humor: {humor_limpo}", ln=True)
+    # Agora pode usar os dados originais do 'reg' sem precisar de limpeza pesada
+    # pois a fonte DejaVu suporta UTF-8 completo
+    pdf.set_font("DejaVu", "", 10)
+    texto_cabecalho = f"Data: {reg.get('data_f', '')} | Horário: {reg.get('hora_f', '')} | Humor: {reg.get('sentimento', '')}"
+    pdf.cell(0, 6, texto_cabecalho, ln=True)
+    
     pdf.line(10, 28, 200, 28)
     pdf.ln(6)
-    
-    for title, val in [("1. Como foi o dia hoje?", dia_limpo), 
-                       ("2. O que pode melhorar amanha?", melhorar_limpo), 
-                       ("3. Desabafo Livre:", desabafo_limpo)]:
-        pdf.set_font("Helvetica", "B", 11)
-        pdf.cell(0, 8, title, ln=True)
-        pdf.set_font("Helvetica", "", 10)
-        # Na fpdf2, não é necessário fazer o encode/decode manual se a fonte suportar
-        pdf.multi_cell(0, 6, val)
-        pdf.ln(3)
         
-    if insight_limpo:
-        pdf.set_font("Helvetica", "B", 11)
-        pdf.cell(0, 8, "Indicacoes da Mia:", ln=True)
-        pdf.set_font("Helvetica", "I", 10)
-        pdf.multi_cell(0, 6, insight_limpo.replace("**", "").replace("*", ""))
-
-    # CORREÇÃO PRINCIPAL: 
-    # Use output() sem argumentos para retornar os bytes diretamente na fpdf2
     return pdf.output()
 
 def salvar_caderno_completo(usuario_id, data, como_foi, melhorar, desabafo, sentimento, insight):
